@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Carrusel Interactivo</title>
+  <!-- Google Fonts: Poppins -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --bg-card: #ecf5f5;
+      --text-color: #1a1a1a;
+      --accent-color: #054C50;
+      --accent-hover: #033437;
+      --border-radius: 16px;
+      --font-family: 'Poppins', sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--font-family);
+      background-color: #f4f7f6;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+      color: var(--text-color);
+    }
+
+    /* Contenedor Principal */
+    .main-wrapper {
+      position: relative;
+      width: 100%;
+      max-width: 720px;
+      background: #ffffff;
+      padding: 40px 30px 30px 30px;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    }
+
+    /* Instrucción flotante superior derecha */
+    .floating-instruction {
+      position: absolute;
+      top: -16px;
+      right: 20px;
+      background-color: var(--accent-color);
+      color: #ffffff;
+      font-size: 0.82rem;
+      font-weight: 500;
+      padding: 8px 16px;
+      border-radius: 30px;
+      box-shadow: 0 4px 12px rgba(5, 76, 80, 0.25);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      z-index: 10;
+    }
+
+    .floating-instruction svg {
+      width: 16px;
+      height: 16px;
+      fill: currentColor;
+      flex-shrink: 0;
+    }
+
+    /* Marco del Carrusel */
+    .carousel-container {
+      position: relative;
+      overflow: hidden;
+      border-radius: var(--border-radius);
+      width: 100%;
+      margin-top: 10px;
+    }
+
+    .carousel-track {
+      display: flex;
+      transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+      width: 100%;
+    }
+
+    /* Tarjetas */
+    .carousel-card {
+      min-width: 100%;
+      background-color: var(--bg-card);
+      border: 1px solid rgba(0, 0, 0, 0.04);
+      border-radius: var(--border-radius);
+      padding: 45px 35px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.6), 0 4px 12px rgba(0, 0, 0, 0.03);
+      user-select: none;
+    }
+
+    .carousel-card p {
+      font-size: 1.05rem;
+      line-height: 1.6;
+      color: #2c3e50;
+      font-weight: 400;
+      max-width: 580px;
+    }
+
+    /* Controles y Botones */
+    .controls-wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 25px;
+    }
+
+    .nav-btn {
+      background-color: var(--accent-color);
+      color: #ffffff;
+      border: none;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 10px rgba(5, 76, 80, 0.2);
+    }
+
+    .nav-btn:hover {
+      background-color: var(--accent-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 14px rgba(5, 76, 80, 0.3);
+    }
+
+    .nav-btn:active {
+      transform: translateY(0);
+    }
+
+    .nav-btn svg {
+      width: 20px;
+      height: 20px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    /* Puntos Indicadores (Dots) */
+    .dots-container {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background-color: #ccc;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .dot.active {
+      background-color: var(--accent-color);
+      width: 28px;
+      border-radius: 12px;
+    }
+
+    /* Responsividad */
+    @media (max-width: 576px) {
+      .main-wrapper {
+        padding: 35px 20px 20px 20px;
+      }
+
+      .floating-instruction {
+        font-size: 0.75rem;
+        padding: 6px 12px;
+        right: 10px;
+        top: -14px;
+      }
+
+      .carousel-card {
+        padding: 30px 20px;
+      }
+
+      .carousel-card p {
+        font-size: 0.95rem;
+      }
+
+      .nav-btn {
+        width: 38px;
+        height: 38px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="main-wrapper">
+    <!-- Instrucción Flotante -->
+    <div class="floating-instruction">
+      <svg viewBox="0 0 24 24">
+        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+      </svg>
+      <span>Haga clic sobre los botones para ampliar la interactuar.</span>
+    </div>
+
+    <!-- Carrusel -->
+    <div class="carousel-container" id="carouselContainer">
+      <div class="carousel-track" id="carouselTrack">
+        <!-- Tarjeta 1 (Original) -->
+        <div class="carousel-card">
+          <p>Integra prácticas sostenibles en la ejecución de proyectos para reducir el impacto ambiental.</p>
+        </div>
+        <!-- Tarjeta 2 (Original) -->
+        <div class="carousel-card">
+          <p>Identifica normativas internacionales y estándares locales para asegurar el cumplimiento de criterios de sostenibilidad.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Controles de Navegación -->
+    <div class="controls-wrapper">
+      <button class="nav-btn" id="prevBtn" aria-label="Anterior">
+        <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg>
+      </button>
+
+      <div class="dots-container" id="dotsContainer">
+        <span class="dot active" data-index="0"></span>
+        <span class="dot" data-index="1"></span>
+      </div>
+
+      <button class="nav-btn" id="nextBtn" aria-label="Siguiente">
+        <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg>
+      </button>
+    </div>
+  </div>
+
+  <script>
+    const track = document.getElementById('carouselTrack');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const dots = document.querySelectorAll('.dot');
+    const totalSlides = 2;
+    let currentIndex = 0;
+
+    function updateCarousel(index) {
+      currentIndex = index;
+      track.style.transform = `translateX(-${currentIndex * 100}%)`;
+
+      // Actualizar Dots
+      dots.forEach((dot, i) => {
+        dot.classList.toggle('active', i === currentIndex);
+      });
+    }
+
+    prevBtn.addEventListener('click', () => {
+      const newIndex = currentIndex === 0 ? totalSlides - 1 : currentIndex - 1;
+      updateCarousel(newIndex);
+    });
+
+    nextBtn.addEventListener('click', () => {
+      const newIndex = currentIndex === totalSlides - 1 ? 0 : currentIndex + 1;
+      updateCarousel(newIndex);
+    });
+
+    dots.forEach(dot => {
+      dot.addEventListener('click', (e) => {
+        const index = parseInt(e.target.getAttribute('data-index'));
+        updateCarousel(index);
+      });
+    });
+
+    // Soporte para navegación con teclado
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowLeft') prevBtn.click();
+      if (e.key === 'ArrowRight') nextBtn.click();
+    });
+  </script>
+
+</body>
+</html>
