@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carrusel Interactivo</title>
+    <!-- Google Fonts: Poppins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-card: #ecf5f5;
+            --text-color: #1a1a1a;
+            --accent-color: #054C50;
+            --accent-hover: #033437;
+            --border-radius: 16px;
+            --font-family: 'Poppins', sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-family);
+            background-color: #f4f7f6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            color: var(--text-color);
+        }
+
+        /* Contenedor Principal */
+        .main-wrapper {
+            position: relative;
+            width: 100%;
+            max-width: 780px;
+            background: #ffffff;
+            padding: 45px 35px 30px 35px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+        }
+
+        /* Instrucción flotante superior derecha */
+        .floating-instruction {
+            position: absolute;
+            top: -16px;
+            right: 20px;
+            background-color: var(--accent-color);
+            color: #ffffff;
+            font-size: 0.82rem;
+            font-weight: 500;
+            padding: 8px 16px;
+            border-radius: 30px;
+            box-shadow: 0 4px 12px rgba(5, 76, 80, 0.25);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            z-index: 10;
+        }
+
+        .floating-instruction svg {
+            width: 16px;
+            height: 16px;
+            fill: currentColor;
+            flex-shrink: 0;
+        }
+
+        /* Marco del Carrusel */
+        .carousel-container {
+            position: relative;
+            overflow: hidden;
+            border-radius: var(--border-radius);
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .carousel-track {
+            display: flex;
+            transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+            width: 100%;
+        }
+
+        /* Tarjetas */
+        .carousel-card {
+            min-width: 100%;
+            background-color: var(--bg-card);
+            border: 1px solid rgba(0, 0, 0, 0.04);
+            border-radius: var(--border-radius);
+            padding: 35px 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: left;
+            box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.6), 0 4px 12px rgba(0, 0, 0, 0.03);
+            user-select: none;
+        }
+
+        .carousel-card p {
+            font-size: 0.96rem;
+            line-height: 1.65;
+            color: #2c3e50;
+            font-weight: 400;
+        }
+
+        /* Controles y Botones */
+        .controls-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 25px;
+        }
+
+        .nav-btn {
+            background-color: var(--accent-color);
+            color: #ffffff;
+            border: none;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 10px rgba(5, 76, 80, 0.2);
+        }
+
+        .nav-btn:hover {
+            background-color: var(--accent-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 14px rgba(5, 76, 80, 0.3);
+        }
+
+        .nav-btn:active {
+            transform: translateY(0);
+        }
+
+        .nav-btn svg {
+            width: 20px;
+            height: 20px;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 2.5;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        /* Puntos Indicadores (Dots) */
+        .dots-container {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: #ccc;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .dot.active {
+            background-color: var(--accent-color);
+            width: 28px;
+            border-radius: 12px;
+        }
+
+        /* Responsividad */
+        @media (max-width: 576px) {
+            .main-wrapper {
+                padding: 35px 15px 20px 15px;
+            }
+
+            .floating-instruction {
+                font-size: 0.72rem;
+                padding: 6px 12px;
+                right: 10px;
+                top: -14px;
+            }
+
+            .carousel-card {
+                padding: 25px 20px;
+            }
+
+            .carousel-card p {
+                font-size: 0.88rem;
+            }
+
+            .nav-btn {
+                width: 38px;
+                height: 38px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="main-wrapper">
+        <!-- Instrucción Flotante -->
+        <div class="floating-instruction">
+            <svg viewBox="0 0 24 24">
+                <path
+                    d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z" />
+            </svg>
+            <span>Haga clic sobre los botones para ampliar la interactuar.</span>
+        </div>
+
+        <!-- Carrusel -->
+        <div class="carousel-container" id="carouselContainer">
+            <div class="carousel-track" id="carouselTrack">
+                <!-- Párrafo 1 -->
+                <div class="carousel-card">
+                    <p>El reúso de aguas grises (AG) es el aprovechamiento de las aguas provenientes de lavamanos,
+                        duchas y lavadoras, que tienen una carga contaminante menor que las aguas negras, para su reúso
+                        en descargas de sanitarios o irrigación. La norma técnica colombiana NTC-ICONTEC 5726:2015
+                        establece los requisitos para el diseño, instalación y mantenimiento de sistemas de manejo de
+                        aguas grises en edificaciones. Un sistema típico de reúso de AG incluye: recolección
+                        diferenciada de las fuentes grises, tratamiento primario (cribado, sedimentación) y secundario
+                        (biológico o fisicoquímico) según el uso final, almacenamiento y distribución. El potencial de
+                        ahorro de agua potable mediante el reúso de aguas grises en una vivienda familiar es del orden
+                        del 30–40 %, dependiendo del número de ocupantes y los usos finales habilitados.</p>
+                </div>
+                <!-- Párrafo 2 -->
+                <div class="carousel-card">
+                    <p>El paisajismo sostenible o xeripaisajismo es el diseño de áreas verdes y jardines que minimiza el
+                        consumo de agua de riego mediante la selección de especies vegetales nativas o adaptadas a las
+                        condiciones climáticas locales, el diseño del suelo para maximizar la infiltración y retención
+                        de humedad y el uso de sistemas de riego eficientes como el goteo y la aspersión controlada. En
+                        proyectos de vivienda y equipamientos urbanos en Colombia, el paisajismo sostenible incluye la
+                        incorporación de cubiertas y muros vegetados que, además de reducir el consumo de agua de riego,
+                        aportan beneficios en aislamiento térmico, gestión de aguas lluvias y biodiversidad
+                        urbana.</p>
+                </div>
+                <!-- Párrafo 3 -->
+                <div class="carousel-card">
+                    <p>Implicación gerencial: la Resolución 0549 de 2015 del Ministerio de Vivienda, Ciudad y Territorio
+                        establece metas mínimas de ahorro en el consumo de agua para edificaciones nuevas, segmentadas
+                        por tipología (vivienda, comercio, institucional) y por zona hidrológica de Colombia. El
+                        cumplimiento de estas metas no es optativo: es un requisito para la obtención de la licencia de
+                        construcción en los municipios donde ha sido adoptada la resolución. Por tanto, el gerente de
+                        proyecto debe garantizar que el equipo de diseño dimensione adecuadamente los sistemas de ahorro
+                        de agua, documente los cálculos de eficiencia requeridos y los incorpore en los planos y
+                        memorias del proyecto antes de la radicación de la licencia de construcción.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Controles de Navegación -->
+        <div class="controls-wrapper">
+            <button class="nav-btn" id="prevBtn" aria-label="Anterior">
+                <svg viewBox="0 0 24 24">
+                    <polyline points="15 18 9 12 15 6"></polyline>
+                </svg>
+            </button>
+
+            <div class="dots-container" id="dotsContainer">
+                <span class="dot active" data-index="0"></span>
+                <span class="dot" data-index="1"></span>
+                <span class="dot" data-index="2"></span>
+            </div>
+
+            <button class="nav-btn" id="nextBtn" aria-label="Siguiente">
+                <svg viewBox="0 0 24 24">
+                    <polyline points="9 18 15 12 9 6"></polyline>
+                </svg>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        const track = document.getElementById('carouselTrack');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const dots = document.querySelectorAll('.dot');
+        const totalSlides = 3;
+        let currentIndex = 0;
+
+        function updateCarousel(index) {
+            currentIndex = index;
+            track.style.transform = `translateX(-${currentIndex * 100}%)`;
+
+            // Actualizar Dots
+            dots.forEach((dot, i) => {
+                dot.classList.toggle('active', i === currentIndex);
+            });
+        }
+
+        prevBtn.addEventListener('click', () => {
+            const newIndex = currentIndex === 0 ? totalSlides - 1 : currentIndex - 1;
+            updateCarousel(newIndex);
+        });
+
+        nextBtn.addEventListener('click', () => {
+            const newIndex = currentIndex === totalSlides - 1 ? 0 : currentIndex + 1;
+            updateCarousel(newIndex);
+        });
+
+        dots.forEach(dot => {
+            dot.addEventListener('click', (e) => {
+                const index = parseInt(e.target.getAttribute('data-index'));
+                updateCarousel(index);
+            });
+        });
+
+        // Soporte para navegación con teclado
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft') prevBtn.click();
+            if (e.key === 'ArrowRight') nextBtn.click();
+        });
+    </script>
+
+</body>
+
+</html>
