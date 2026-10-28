@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="es" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Desafíos de la Eficiencia Energética en Colombia</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Poppins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400&display=swap" rel="stylesheet">
+    <!-- Font Awesome icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        deepTeal: '#054C50',
+                        deepTealHover: '#086369',
+                        deepTealDark: '#022e31',
+                        goldAccent: '#d4af37',
+                    },
+                    fontFamily: {
+                        sans: ['Poppins', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        * {
+            font-family: 'Poppins', sans-serif;
+        }
+
+        /* Fondo luxury oscuro con destello ambiental */
+        body {
+            background-color: #030712;
+            background-image: 
+                radial-gradient(circle at 15% 20%, rgba(5, 76, 80, 0.25) 0%, transparent 45%),
+                radial-gradient(circle at 85% 80%, rgba(5, 76, 80, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 50% 50%, rgba(15, 23, 42, 0.8) 0%, transparent 100%);
+            background-attachment: fixed;
+        }
+
+        /* Rejilla arquitectónica dorada/teal sutil al hover */
+        .grid-blueprint-overlay {
+            background-image: 
+                linear-gradient(rgba(5, 76, 80, 0.08) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(5, 76, 80, 0.08) 1px, transparent 1px);
+            background-size: 24px 24px;
+        }
+
+        /* Glassmorphism de Alta Gama */
+        .luxury-glass-card {
+            background: rgba(15, 23, 42, 0.55);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 
+                0 10px 30px -10px rgba(0, 0, 0, 0.5),
+                inset 0 1px 0 0 rgba(255, 255, 255, 0.1);
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            cursor: pointer;
+        }
+
+        .luxury-glass-card:hover {
+            transform: translateY(-7px) scale(1.008);
+            background: rgba(15, 23, 42, 0.75);
+            border-color: rgba(5, 76, 80, 0.7);
+            box-shadow: 
+                0 25px 50px -12px rgba(5, 76, 80, 0.25),
+                0 0 30px 2px rgba(5, 76, 80, 0.15),
+                inset 0 1px 0 0 rgba(255, 255, 255, 0.2);
+        }
+
+        /* Destello sutil que cruza la tarjeta (Gloss Sweep) */
+        .shimmer-effect {
+            position: absolute;
+            top: 0;
+            left: -150%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                90deg,
+                transparent 0%,
+                rgba(255, 255, 255, 0.03) 40%,
+                rgba(5, 76, 80, 0.15) 50%,
+                rgba(255, 255, 255, 0.03) 60%,
+                transparent 100%
+            );
+            transition: left 0.8s ease-in-out;
+            pointer-events: none;
+        }
+
+        .luxury-glass-card:hover .shimmer-effect {
+            left: 150%;
+        }
+
+        /* Indicador de construcción sutil */
+        .corner-accent {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            border-color: rgba(5, 76, 80, 0.4);
+            transition: border-color 0.4s ease, transform 0.4s ease;
+        }
+
+        .luxury-glass-card:hover .corner-accent {
+            border-color: #2dd4bf;
+        }
+
+        .corner-tl { top: 12px; left: 12px; border-top: 2px solid; border-left: 2px solid; }
+        .corner-br { bottom: 12px; right: 12px; border-bottom: 2px solid; border-right: 2px solid; }
+
+        /* Animación Modal */
+        .modal-enter {
+            animation: modalFadeIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        @keyframes modalFadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.94) translateY(12px);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+    </style>
+</head>
+<body class="min-h-screen text-slate-100 flex flex-col justify-between p-4 sm:p-8 lg:p-12 relative overflow-x-hidden pb-12">
+
+    <!-- Mensaje / Banner Flotante de Instrucción (Posición Superior Derecha) -->
+    <div class="fixed top-6 right-6 z-40 bg-slate-900/90 backdrop-blur-md border border-teal-500/40 px-5 py-2.5 rounded-full shadow-2xl flex items-center gap-3 animate-pulse">
+        <span class="w-2.5 h-2.5 rounded-full bg-teal-400"></span>
+        <span class="text-xs sm:text-sm font-medium text-teal-200 tracking-wide">
+            Haga clic sobre las tarjetas para ampliar la información.
+        </span>
+        <i class="fa-solid fa-hand-pointer text-teal-400 text-xs"></i>
+    </div>
+
+    <!-- Encabezado Sobrio y Elegante alineado a la izquierda -->
+    <header class="max-w-7xl w-full mx-auto text-left mb-12 pt-4 relative z-10">
+        <div class="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-deepTeal/20 border border-deepTeal/50 text-teal-300 text-xs font-medium tracking-widest uppercase mb-4 shadow-inner">
+            <span class="w-2 h-2 rounded-full bg-teal-400 animate-pulse"></span>
+            Diagnóstico Estructural & Sustainability
+        </div>
+        
+        <h1 class="text-3xl sm:text-5xl font-extrabold text-white tracking-tight leading-tight">
+            EFICIENCIA ENERGÉTICA EN <span class="text-transparent bg-clip-text bg-gradient-to-r from-teal-200 via-teal-400 to-emerald-400">EDIFICACIONES</span>
+        </h1>
+        
+        <div class="w-32 h-1 bg-gradient-to-r from-deepTeal via-teal-400 to-transparent mt-4 rounded-full opacity-80"></div>
+        
+        <p class="text-slate-400 text-sm sm:text-base max-w-2xl mt-4 leading-relaxed font-light">
+            Cuatro dimensiones críticas sobre la adopción normativa, herramientas técnicas, financiamiento e infraestructura en Colombia.
+        </p>
+    </header>
+
+    <!-- Grilla Principal con las 4 Tarjetas -->
+    <main class="max-w-7xl w-full mx-auto grid grid-cols-1 md:grid-cols-2 gap-7 relative z-10">
+
+        <!-- TARJETA 1 -->
+        <article onclick="openModal('card-1-full', 'Brecha Normativa y Adopción Territorial (Resolución 0549)', '01')" 
+                 class="luxury-glass-card relative rounded-2xl p-8 text-left flex flex-col justify-between overflow-hidden group">
+            
+            <div class="shimmer-effect"></div>
+            <div class="absolute inset-0 grid-blueprint-overlay opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
+            
+            <div class="corner-accent corner-tl"></div>
+            <div class="corner-accent corner-br"></div>
+
+            <div class="relative z-10">
+                <div class="flex items-center justify-between mb-6 flex-row border-b border-slate-800/80 pb-4">
+                    <div class="w-10 h-10 rounded-lg bg-slate-900/80 border border-slate-700/50 flex items-center justify-center text-teal-400 group-hover:bg-deepTeal group-hover:text-white transition-all duration-300">
+                        <i class="fa-solid fa-gavel text-sm"></i>
+                    </div>
+                </div>
+
+                <h2 class="text-lg font-bold text-white mb-3 group-hover:text-teal-300 transition-colors">
+                    Brecha entre Norma y Práctica
+                </h2>
+
+                <!-- Extracto / Resumen corto en vista inicial -->
+                <p class="text-slate-400 text-sm leading-relaxed text-left font-light group-hover:text-slate-200 transition-colors">
+                    En primer lugar, la brecha entre la norma y la práctica es significativa: aunque la Resolución 0549 de 2015 del Ministerio de Vivienda establece parámetros mínimos de eficiencia energética e hídrica...
+                </p>
+            </div>
+
+            <div class="mt-8 pt-4 border-t border-slate-800/60 flex items-center justify-between text-xs text-slate-400 relative z-10">
+                <span class="inline-flex items-center gap-2 text-teal-400 font-semibold group-hover:text-teal-200 group-hover:translate-x-1 transition-all">
+                    Ver información completa <i class="fa-solid fa-arrow-right text-[10px]"></i>
+                </span>
+                <span class="font-mono text-slate-500 text-[11px]">NORMATIVA URBANÍSTICA</span>
+            </div>
+        </article>
+
+        <!-- TARJETA 2 -->
+        <article onclick="openModal('card-2-full', 'Formación y Simulación Bioclimática', '02')" 
+                 class="luxury-glass-card relative rounded-2xl p-8 text-left flex flex-col justify-between overflow-hidden group">
+            
+            <div class="shimmer-effect"></div>
+            <div class="absolute inset-0 grid-blueprint-overlay opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
+            
+            <div class="corner-accent corner-tl"></div>
+            <div class="corner-accent corner-br"></div>
+
+            <div class="relative z-10">
+                <div class="flex items-center justify-between mb-6 flex-row border-b border-slate-800/80 pb-4">
+                    <div class="w-10 h-10 rounded-lg bg-slate-900/80 border border-slate-700/50 flex items-center justify-center text-teal-400 group-hover:bg-deepTeal group-hover:text-white transition-all duration-300">
+                        <i class="fa-solid fa-compass-drafting text-sm"></i>
+                    </div>
+                </div>
+
+                <h2 class="text-lg font-bold text-white mb-3 group-hover:text-teal-300 transition-colors">
+                    Herramientas Técnicas y Simulación
+                </h2>
+
+                <!-- Extracto / Resumen corto en vista inicial -->
+                <p class="text-slate-400 text-sm leading-relaxed text-left font-light group-hover:text-slate-200 transition-colors">
+                    En segundo lugar, la formación en diseño bioclimático y eficiencia energética en los programas de arquitectura e ingeniería civil en Colombia ha avanzado, pero persisten brechas...
+                </p>
+            </div>
+
+            <div class="mt-8 pt-4 border-t border-slate-800/60 flex items-center justify-between text-xs text-slate-400 relative z-10">
+                <span class="inline-flex items-center gap-2 text-teal-400 font-semibold group-hover:text-teal-200 group-hover:translate-x-1 transition-all">
+                    Ver información completa <i class="fa-solid fa-arrow-right text-[10px]"></i>
+                </span>
+                <span class="font-mono text-slate-500 text-[11px]">DISEÑO TÉCNICO</span>
+            </div>
+        </article>
+
+        <!-- TARJETA 3 -->
+        <article onclick="openModal('card-3-full', 'Financiación e Inversión Verde (ASG)', '03')" 
+                 class="luxury-glass-card relative rounded-2xl p-8 text-left flex flex-col justify-between overflow-hidden group">
+            
+            <div class="shimmer-effect"></div>
+            <div class="absolute inset-0 grid-blueprint-overlay opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
+            
+            <div class="corner-accent corner-tl"></div>
+            <div class="corner-accent corner-br"></div>
+
+            <div class="relative z-10">
+                <div class="flex items-center justify-between mb-6 flex-row border-b border-slate-800/80 pb-4">
+                    <div class="w-10 h-10 rounded-lg bg-slate-900/80 border border-slate-700/50 flex items-center justify-center text-teal-400 group-hover:bg-deepTeal group-hover:text-white transition-all duration-300">
+                        <i class="fa-solid fa-chart-line text-sm"></i>
+                    </div>
+                </div>
+
+                <h2 class="text-lg font-bold text-white mb-3 group-hover:text-teal-300 transition-colors">
+                    Barreras de Acceso al Crédito
+                </h2>
+
+                <!-- Extracto / Resumen corto en vista inicial -->
+                <p class="text-slate-400 text-sm leading-relaxed text-left font-light group-hover:text-slate-200 transition-colors">
+                    En tercer lugar, la financiación de inversiones en eficiencia energética y energías renovables para edificaciones enfrenta barreras de acceso al crédito en el mercado colombiano...
+                </p>
+            </div>
+
+            <div class="mt-8 pt-4 border-t border-slate-800/60 flex items-center justify-between text-xs text-slate-400 relative z-10">
+                <span class="inline-flex items-center gap-2 text-teal-400 font-semibold group-hover:text-teal-200 group-hover:translate-x-1 transition-all">
+                    Ver información completa <i class="fa-solid fa-arrow-right text-[10px]"></i>
+                </span>
+                <span class="font-mono text-slate-500 text-[11px]">MECANISMOS ASG</span>
+            </div>
+        </article>
+
+        <!-- TARJETA 4 -->
+        <article onclick="openModal('card-4-full', 'Disponibilidad de Mano de Obra Calificada', '04')" 
+                 class="luxury-glass-card relative rounded-2xl p-8 text-left flex flex-col justify-between overflow-hidden group">
+            
+            <div class="shimmer-effect"></div>
+            <div class="absolute inset-0 grid-blueprint-overlay opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
+            
+            <div class="corner-accent corner-tl"></div>
+            <div class="corner-accent corner-br"></div>
+
+            <div class="relative z-10">
+                <div class="flex items-center justify-between mb-6 flex-row border-b border-slate-800/80 pb-4">
+                    <div class="w-10 h-10 rounded-lg bg-slate-900/80 border border-slate-700/50 flex items-center justify-center text-teal-400 group-hover:bg-deepTeal group-hover:text-white transition-all duration-300">
+                        <i class="fa-solid fa-microchip text-sm"></i>
+                    </div>
+                </div>
+
+                <h2 class="text-lg font-bold text-white mb-3 group-hover:text-teal-300 transition-colors">
+                    Capacidad Técnica e Infraestructura
+                </h2>
+
+                <!-- Extracto / Resumen corto en vista inicial -->
+                <p class="text-slate-400 text-sm leading-relaxed text-left font-light group-hover:text-slate-200 transition-colors">
+                    Cuarto, la disponibilidad de mano de obra calificada para la instalación, operación y mantenimiento de sistemas de alta eficiencia energética, paneles fotovoltaicos, VRF...
+                </p>
+            </div>
+
+            <div class="mt-8 pt-4 border-t border-slate-800/60 flex items-center justify-between text-xs text-slate-400 relative z-10">
+                <span class="inline-flex items-center gap-2 text-teal-400 font-semibold group-hover:text-teal-200 group-hover:translate-x-1 transition-all">
+                    Ver información completa <i class="fa-solid fa-arrow-right text-[10px]"></i>
+                </span>
+                <span class="font-mono text-slate-500 text-[11px]">CAPACIDAD TÉCNICA</span>
+            </div>
+        </article>
+
+    </main>
+
+    <!-- ALMACENAMIENTO OCULTO DEL TEXTO COMPLETO E ÍNTEGRO DE CADA TARJETA -->
+    <div class="hidden">
+        <p id="card-1-full">En primer lugar, la brecha entre la norma y la práctica es significativa: aunque la Resolución 0549 de 2015 del Ministerio de Vivienda establece parámetros mínimos de eficiencia energética e hídrica para edificaciones nuevas, su adopción voluntaria por parte de los municipios, que deben incorporarla en sus Planes de Ordenamiento Territorial, ha sido desigual. A 2023, el porcentaje de municipios colombianos con los planes de ordenamiento actualizados e incorporando los requisitos de la Resolución 0549 es aún bajo, lo que limita el alcance efectivo de la norma.</p>
+
+        <p id="card-2-full">En segundo lugar, la formación en diseño bioclimático y eficiencia energética en los programas de arquitectura e ingeniería civil en Colombia ha avanzado, pero persisten brechas importantes en la comprensión y aplicación de herramientas de simulación energética y en el conocimiento de los productos de alta eficiencia disponibles en el mercado nacional. La mayoría de los proyectos de construcción medianos y pequeños, que representan la mayor parte del sector en términos de número de obras, no cuenta con simulaciones energéticas ni estudios de confort ambiental, lo que lleva a decisiones de diseño basadas en tradición constructiva o en criterios económicos de corto plazo.</p>
+
+        <p id="card-3-full">En tercer lugar, la financiación de inversiones en eficiencia energética y energías renovables para edificaciones enfrenta barreras de acceso al crédito en el mercado colombiano, especialmente para proyectos de mediana y pequeña escala. Si bien el mercado de financiamiento verde ha crecido en Colombia desde la emisión de los primeros bonos verdes en 2016, el acceso a este tipo de financiamiento está concentrado en grandes constructoras y promotores inmobiliarios con experiencia en reporting ASG. Los mecanismos de financiación como los contratos de desempeño energético (ESCO) y los fondos de garantías para proyectos de eficiencia aún tienen una penetración limitada en el sector.</p>
+
+        <p id="card-4-full">Cuarto, la disponibilidad de mano de obra calificada para la instalación, operación y mantenimiento de sistemas de alta eficiencia energética, paneles fotovoltaicos, VRF, sistemas BMS, encerramientos de doble vidrio, es limitada en muchas regiones del país, especialmente fuera de los principales centros urbanos. Este déficit de capacidades técnicas limita la posibilidad de implementar proyectos de eficiencia en municipios intermedios y pequeños, donde las necesidades de infraestructura sostenible son igualmente urgentes.</p>
+    </div>
+
+    <!-- Footer Elegante -->
+    <footer class="max-w-7xl w-full mx-auto text-left mt-16 pt-6 border-t border-slate-800/60 text-xs text-slate-500 flex flex-col sm:flex-row justify-between items-center gap-4 relative z-10 font-light">
+        <p>Informe Técnico de Eficiencia Energética e Infraestructura Sostenible</p>
+        <div class="flex items-center gap-6 font-mono text-[11px] text-slate-400">
+            <span>SISTEMA DE ANÁLISIS 0549</span>
+            <span class="w-1.5 h-1.5 rounded-full bg-deepTeal"></span>
+            <span>COLOMBIA</span>
+        </div>
+    </footer>
+
+    <!-- MODAL PREMIUM INTERACTIVO (Alineación a la izquierda) -->
+    <!-- MODAL PREMIUM INTERACTIVO -->
+    <div id="textModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-xl z-50 flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-300">
+        <div class="bg-slate-900/90 border border-teal-500/30 rounded-3xl max-w-2xl w-full p-6 sm:p-10 shadow-2xl relative text-left modal-enter overflow-hidden">
+            <!-- Resplandor de fondo en modal -->
+            <div class="absolute -top-20 -left-20 w-40 h-40 bg-deepTeal/30 rounded-full blur-3xl pointer-events-none"></div>
+
+            <div class="flex items-center justify-between flex-row border-b border-slate-800 pb-5 mb-6">
+                <div>
+                    <h3 id="modalTitle" class="text-lg font-bold text-white mt-1">Título del Punto</h3>
+                </div>
+                <button onclick="closeModal()" class="w-9 h-9 rounded-full bg-slate-800 text-slate-400 hover:text-white hover:bg-deepTeal transition-all flex items-center justify-center">
+                    <i class="fa-solid fa-xmark text-base"></i>
+                </button>
+            </div>
+
+            <p id="modalBodyText" class="text-slate-200 text-base sm:text-lg leading-relaxed text-left font-light">
+                <!-- Texto copiado de la tarjeta -->
+            </p>
+
+            <div class="mt-8 pt-5 border-t border-slate-800/80 flex justify-end">
+                <button onclick="closeModal()" class="px-6 py-2.5 rounded-xl bg-deepTeal hover:bg-deepTealHover text-white text-xs font-medium tracking-wide transition-all shadow-lg shadow-deepTeal/20">
+                    Cerrar lectura
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Script para interacción de modal -->
+    <script>
+        function openModal(elementId, categoryTitle) {
+            const content = document.getElementById(elementId).innerText;
+            document.getElementById('modalBodyText').innerText = content;
+            document.getElementById('modalTitle').innerText = categoryTitle;
+
+            const modal = document.getElementById('textModal');
+            modal.classList.remove('opacity-0', 'pointer-events-none');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('textModal');
+            modal.classList.add('opacity-0', 'pointer-events-none');
+            document.body.style.overflow = 'auto';
+        }
+
+        // Cerrar modal al presionar Escape
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') closeModal();
+        });
+
+        // Cerrar al hacer clic fuera del modal
+        document.getElementById('textModal').addEventListener('click', function(e) {
+            if (e.target === this) closeModal();
+        });
+    </script>
+</body>
+</html>
